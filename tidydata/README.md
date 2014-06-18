@@ -145,6 +145,18 @@ cmt<-dcast(mt, subject+activity ~ variable, mean)
 write.csv(cmt, file="./tidydata.txt", row.names=F)
 tidydata<-read.csv("./tidydata.txt", stringsAsFactors=F)
 ```
+
+######Acknowledgements:######
+Davide Anguita, Alessandro Ghio, Luca Oneto, Xavier Parra and Jorge L. Reyes-Ortiz. Human Activity Recognition on Smartphones using a Multiclass Hardware-Friendly Support Vector Machine. International Workshop of Ambient Assisted Living (IWAAL 2012). Vitoria-Gasteiz, Spain. Dec 2012
+
+######License:######
+Use of the Run_Analysis.R script is free for all users.
+Use of the resulting dataset "tidydata.txt" in publications must be acknowledged by referencing the following publication [1]
+
+[1] Davide Anguita, Alessandro Ghio, Luca Oneto, Xavier Parra and Jorge L. Reyes-Ortiz. Human Activity Recognition on Smartphones using a Multiclass Hardware-Friendly Support Vector Machine. International Workshop of Ambient Assisted Living (IWAAL 2012). Vitoria-Gasteiz, Spain. Dec 2012
+
+This dataset is distributed AS-IS and no responsibility implied or explicit can be addressed to the author for its use or misuse. Any commercial use is prohibited.
+
 		
 		
 
