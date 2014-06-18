@@ -2,8 +2,8 @@
 
 R-script file for extracting a tidy data set consisting of the mean and std measurements for each subject/acitivity combination. This script will create a tidy data set from the original [Human Activity Recognition Using Smartphones Data Set](http://archive.ics.uci.edu/ml/datasets/Human+Activity+Recognition+Using+Smartphones) 
 
-++++Version 1.0               
-Author: Ramesh Maganti++++
+Version 1.0               
+Author: Ramesh Maganti
 
 Please refer to the **codebook.md** file for more information on the project, the original dataset, the extracted tidy set and the description of each measurement/variable in the tidy data set.
 
@@ -37,8 +37,9 @@ The output of the R script is a tidy data set, tidydata.txt.
 - all the various files are being read in and assigned, using the read.table function
 - All the raw data files, on inspection, do not have any headers and therefore the header=F, in the read.table calls
 - there are other concise ways of doing the same thing in R, by combing multiple read.table calls, but preferred the longer approach for clarity and ease of understanding
-- 
- ````
+
+
+```
 require(stringr)
 require(reshape2)
 testData <- read.table("./test/X_test.txt",header=FALSE)
@@ -48,7 +49,7 @@ trainData <- read.table("./train/X_train.txt",header=FALSE)
 trainData_act <- read.table("./train/y_train.txt",header=FALSE)
 trainData_sub <- read.table("./train/subject_train.txt",header=FALSE)
 activities <- read.table("activity_labels.txt",header=FALSE,colClasses="character")
-	```
+```
 
 			
             
@@ -57,11 +58,12 @@ activities <- read.table("activity_labels.txt",header=FALSE,colClasses="characte
 - An appropriate replacement for this is to replace the activity number with the actual activity name. 
 - The levels and labels for activities are read in from the activity_labels text file and a factor variable created
 - The test&train activity data frame variable is converted to a factor variable(created with the levels and labels read in from the activity labels text file) 
-- 
-`````
+ 
+
+```
 testData_act$V1 <- factor(testData_act$V1,levels=activities$V1,labels=activities$V2)
 trainData_act$V1 <- factor(trainData_act$V1,levels=activities$V1,labels=activities$V2)
-	```
+```
 
 			
 			
@@ -71,7 +73,8 @@ trainData_act$V1 <- factor(trainData_act$V1,levels=activities$V1,labels=activiti
 - therefore this is read in a character columns to have 561 variables with 561 variable names (some being duplicates)
 - Subsequent processing during the extract stage wil address the duplicate columns
 
-- `````
+
+```
 features <- read.table("features.txt",header=FALSE,colClasses="character")
 colnames(testData)<-features$V2
 colnames(trainData)<-features$V2
@@ -79,15 +82,16 @@ colnames(testData_act)<-c("activity")
 colnames(trainData_act)<-c("activity")
 colnames(testData_sub)<-c("subject")
 colnames(trainData_sub)<-c("subject")
-	```
+```
 	
 	
 ######4: Merge test and training sets into one data set, including activities and subjects######
 - The cbind calls below add the activity and subject variables as new columns to both the test and train data sets.
 - both of these are required, since the objective of the exercise is to use these two variables as "id" variables or variables for which the measurements are to be extracted
 - And finally, the rows of both the test and train data sets are merged to form one super data set
-- 
-`````
+
+
+```
 testData<-cbind(testData,testData_act, testData_sub)
 trainData<-cbind(trainData,trainData_act, trainData_sub)
 mergedData<-rbind(testData,trainData)
@@ -98,8 +102,9 @@ mergedData<-rbind(testData,trainData)
 - These are removed by indexing the mergedData for the columns found by the logical grep call (lgrepl). The ! preceding the lgrep removes the column at the indices
 - All other variables other than those variable names that match a mean or std measurement are filtered out
 - The subject and activity columns are retained since they are the id variables for which the measurements are to be computed 
-- 
-````
+
+
+```
  mergedData<-mergedData[, !grepl("angle|mean[fF]req", colnames(mergedData))]
 subdata<-mergedData[, grep("mean|std|activity|subject", colnames(mergedData))]
 ```
@@ -109,8 +114,9 @@ subdata<-mergedData[, grep("mean|std|activity|subject", colnames(mergedData))]
 - removing all alphanumeric characters and replacing them with an empty string,
 - replacing the occurence of body twice with a single occurence
 - finally reset the names of mergedData with the cleaned set of names 
-- 
-````
+
+
+```
 nams<-tolower(colnames(subdata))
 nams2<-str_replace_all(nams, "[^[:alnum:]]", "")
 nams2<-gsub("bodybody","body", nams2)
@@ -121,8 +127,9 @@ colnames(subdata)<-nams2
 -  using the reshape package to melt and cast the entire subset extracted earlier to have subject and activity as the id variables and the values of the rest of the variable set
 -  this is then recast to compute the mean of the measurements for each subject/activity combination using the formula in the dcast call
 -  Decided to go with a format of Activity1(Subj1:30), Activity2(Subj1:30) rather than the Subject/Actiivty format, since I thought this made better reading, having a comparison of all 30 subjects for each activity
-- 
-````
+
+
+```
 mt<-melt(subdata, id.vars=c("subject", "activity"))
 cmt<-dcast(mt, subject+activity ~ variable, mean)
 ```
@@ -132,8 +139,9 @@ cmt<-dcast(mt, subject+activity ~ variable, mean)
 - row.names set to False, to avoid an additional column with row numbers to be written. 
 - another equally efficient way to write is dput and read is dget, especially for text files
 - the tidy set created can be read back using the read.csv call
-- 
-````
+
+
+```
 write.csv(cmt, file="./tidydata.txt", row.names=F)
 tidydata<-read.csv("./tidydata.txt", stringsAsFactors=F)
 ```
