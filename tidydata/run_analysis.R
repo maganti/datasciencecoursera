@@ -36,7 +36,7 @@ colnames(subdata)<-nams2
 #creating a second tidy data set with the average of each variable for each 
 # activity and each subject
 mt<-melt(subdata, id.vars=c("subject", "activity"))
-cmt<-dcast(mt, activity+subject ~ variable, mean)
+cmt<-dcast(mt, subject+activity ~ variable, mean)
 #writes the resultant tidy data set to a file using write.csv
 write.csv(cmt, file="./tidydata.txt", row.names=F)
 tidydata<-read.csv("./tidydata.txt", stringsAsFactors=F)
