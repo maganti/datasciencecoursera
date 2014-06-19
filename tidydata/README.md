@@ -15,9 +15,9 @@ Here are the steps to take before running the R script:
 2. Unzip the file to any directory of your choice, say "./projFiles".
 Make sure the working directory in R is set to this directory.
 4.   Copy the run_analysis.R script to this directory
-5.   Make sure the following files and folders are there in this directory ("./profFiles"):
+5.   Make sure the following files and folders are there in this directory ("./projFiles"):
 
-	- 	./profFiles/features.txt
+	- 	./projFiles/features.txt
 	- 	./projFiles/activity_labels.txt
 	- 	./projFiles/train/subject_train.txt
 	- 	./projFiles/test/subject_test.txt
@@ -28,7 +28,7 @@ Make sure the working directory in R is set to this directory.
 	
 Once those steps are complete, you can run the R script (run_analysis.R). Note that it requires the stringr and the reshape2 package.
 
-The output of the R script is a tidy data set, tidydata.txt.
+The output of the R script is a tidy data set, "tidydata.txt".
 
 
 ##### WHAT DOES THE SCRIPT DO, AND HOW DOES IT WORK#####
@@ -70,7 +70,7 @@ trainData_act$V1 <- factor(trainData_act$V1,levels=activities$V1,labels=activiti
 ######3: Sets the names of the variable columns in the test and train data sets to the ones read from the activity_labels text file ######
 - the features.txt file, contains the variable names for the measurements found in the test and train data sets read in
 - this data frame has an integer variable containing values 1:561, for the number of columns and a factor variables that has 477 levels, showing that there are duplicate column variables
-- therefore this is read in a character columns to have 561 variables with 561 variable names (some being duplicates)
+- therefore this is read in as a  "character" column to have 561 variables with 561 variable names (some being duplicates)
 - Subsequent processing during the extract stage wil address the duplicate columns
 
 
@@ -126,7 +126,7 @@ colnames(subdata)<-nams2
 ######7: Creates a second, independent tidy data set with the average of each variable for each combination of subject and activity######
 -  using the reshape package to melt and cast the entire subset extracted earlier to have subject and activity as the id variables and the values of the rest of the variable set
 -  this is then recast to compute the mean of the measurements for each subject/activity combination using the formula in the dcast call
--  Decided to go with a format of Activity1(Subj1:30), Activity2(Subj1:30) rather than the Subject/Actiivty format, since I thought this made better reading, having a comparison of all 30 subjects for each activity
+-  Decided to go with a format of Subject1(Activity1:6), Subject2(Activity1:6) rather than the Actiivty/Subject format, since I thought this made better reading, having a comparison of all 6 activities for each subject
 
 
 ```
@@ -136,7 +136,7 @@ cmt<-dcast(mt, subject+activity ~ variable, mean)
         
         
 ######8:  Writes the resultant tidy data set to a text file using write.csv######
-- row.names set to False, to avoid an additional column with row numbers to be written. 
+- using write.csv but saving as a text file. 
 - another equally efficient way to write is dput and read is dget, especially for text files
 - the tidy set created can be read back using the read.csv call
 
