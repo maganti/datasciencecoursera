@@ -1,7 +1,10 @@
 # PLEASE see the README.md file for detailed explanation about this script and each of the processing steps
+
 #required packages for string processing and reshaping datasets
+
     require(stringr)
     require(reshape2)
+    
 # specifying the header=FALSE since the data files do not have HEADERS in them. 
 #All the data files from the test and train folders, along with the activity_labels text file are read into R
 
