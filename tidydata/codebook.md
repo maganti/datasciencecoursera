@@ -23,7 +23,18 @@ In addition to this file that you are reading, **cookbook.md**, there are three 
 
 
 #####The tidy data and the fields/variables in it#####
-The original data set consisted of 561 measurement variables for each subject, performing one of six activities. This data set is an extract from the 561 column data set, and the subject and activity data sets, filtered down to 68 in all, 66 from the 561 measurement variables and two new variables, subject and the the activity performed by each subject. The 66 measurements captured here represent only the mean and std variables, as specified by the intent of this exercise and all others were discarded. The 68 variables are a result of processing rules applied to keep only the mean and standard deviation measurements for subject/activity combination and discard all others. Each record provides these values for every combination of activity and each of the 30 subjects. 
+######What is Tidy Data######
+The basis for the approach taken for generating the tidy data set is this excellent paper located at: - [Hadley Wickham's paper on Tidy Data](http://vita.had.co.nz/papers/tidy-data.pdf)
+
+Tidy data is a standard way of mapping the meaning of a dataset to its structure. A dataset is tidy or messy depending on how rows, columns and tables are matched with observatoins, variables and types.
+Broad principles of Tidy data:
+	Each variable forms a column
+	Each observation forms a row
+	Each type of observational unit forms a table
+	
+Based on this, given 30 subjects and 6 activities, and a whole bunch of measurements, the tidy data set structure has "subjects" and  "activities" as rows, and the mean and standard deviation measurements as columns or measured variables. Each row represens mean/std measurements for one activity performed by one subject.
+
+The original data set consisted of 561 measurement variables for each subject, performing one of six activities. This data set is filtered down to 66 measured variables, and two id variables, subject and activity, in all 68 columns. The 66 measurements captured here represent only the mean and std variables, as specified by the intent of this exercise and all others were discarded. This data set structure is a result of processing rules applied to keep only the mean and standard deviation measurements for subject/activity combination and discard all others. For more details on the processing rules and rationale please refer to the **README.md** file that is part of this dataset
 
 The units of each variable are normalized and bounded within [-1,1]. Each variable, below is indicated in italics, with the variable type next to it, followed by a description of the variable name , below in the box. The variables are:
 
