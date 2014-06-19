@@ -1,5 +1,8 @@
+# PLEASE see the README.md file for detailed explanation about this script
+#required packages for string processing and reshaping datasets
 require(stringr)
 require(reshape2)
+# specifying the header=FALSE since the data files do not have HEADERS in #them. 
 testData <- read.table("./test/X_test.txt",header=FALSE)
 testData_act <- read.table("./test/y_test.txt",header=FALSE)
 testData_sub <- read.table("./test/subject_test.txt",header=FALSE)
@@ -10,8 +13,7 @@ activities <- read.table("activity_labels.txt",header=FALSE,colClasses="characte
 #uses descriptive activity names to name the activities in the data set
 testData_act$V1 <- factor(testData_act$V1,levels=activities$V1,labels=activities$V2)
 trainData_act$V1 <- factor(trainData_act$V1,levels=activities$V1,labels=activities$V2)
-#sets the names of the variable columns in the test and train data sets to the ones 
-#read from the activity_labels text file
+#sets the names of the variable columns in the test and train data sets to the #ones read from the activity_labels text file
 features <- read.table("features.txt",header=FALSE,colClasses="character")
 colnames(testData)<-features$V2
 colnames(trainData)<-features$V2
