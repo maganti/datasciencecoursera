@@ -36,10 +36,10 @@ Broad principles of tidy data:
 	
 #####The tidy version of the dataset, "tidydata.txt"
 
-This efort primarily focussed on the "manipulation" of "messy" data into "tidy" data to address the above mentioned issues and requirements.  Broadly, the steps taken can be classified as:
+This effort primarily focussed on the "manipulation" of "messy" data into "tidy" data to address the above mentioned issues and requirements.  Broadly, the steps taken can be classified as:
 
 -	**Filter** - removed or filtered observations to end up with only mean/std observations
--	**Transform** - added the **subject** and **activity** variables to the filterd observations
+-	**Transform** - added the **subject** and **activity** variables to the filtered observations
 -	**Aggregate** - collapsed or aggregated the means of all the mean and std measurements per 
 	each of the subject/activity combination. Aggregated data about the same observations, from multiple 
 	sources into one
@@ -47,7 +47,7 @@ This efort primarily focussed on the "manipulation" of "messy" data into "tidy" 
 -	**Clean** - named column headers that were values only with no names, changed inconsistent column names 
 	into "tidy" names based on the tidy data principles
 
-The resultant tidy version of the original data set consists of one table, Mean and Standard Deviations for each of the Subject/Activity combination. This comprises of only the mean() and std() measurement variables across all signals, for each of the 30 subjects, each performing 6 activities. The accompanying **run_analysis.R" script file and the **README.md** files provide the R script source code and the instructions and explanations, for the filtering and tidying rules applied that resulted in the tidy data, **tidydata.txt"** and how to read this data set into R.
+The resultant tidy version of the original data set consists of one table, Mean and Standard Deviations for each of the Subject/Activity combination. This comprises of only the mean() and std() measurement variables across all signals, for each of the 30 subjects, each performing 6 activities. The accompanying **run_analysis.R" script file and the **README.md** files provide the R script source code and the instructions and explanations, for **reproducing this dataset**. They provide details on the specific filtering and tidying rules applied that resulted in the tidy data, **tidydata.txt"** and how to read this data set into R.
 
 Based on this, given 30 subjects and 6 activities, the original data set consisting of 10299 observations for 561 variables has been reshaped into 180 observations (30 subjects times 6 activities each), of 68 columns, with subject and activity being the two 'id' variables), and a set of 66  measurement variables representing the averages of the mean and standard deviation for each subject/activity combination. Therefore, each row represens the average of the mean/std measurements for one activity performed by one subject. All observations not pertaining to mean and std measurements have been filtered out
 
