@@ -11,20 +11,17 @@ Mean and Standard deviations extracted from the recordings of 30 subjects perfor
 - [Original description of the dataset](http://archive.ics.uci.edu/ml/datasets/Human+Activity+Recognition+Using+Smartphones)
 
 #####Information about the Data Set#####
-The experiments have been carried out with a group of 30 volunteers within an age bracket of 19-48 years. Each person performed six activities (WALKING, WALKING_UPSTAIRS, WALKING_DOWNSTAIRS, SITTING, STANDING, LAYING) wearing a smartphone (Samsung Galaxy S II) on the waist. Using its embedded accelerometer and gyroscope, 3-axial linear acceleration and 3-axial angular velocity at a constant rate of 50Hz, were captured in the original dataset. The experiments have been video-recorded to label the data manually. The obtained dataset has been randomly partitioned into two sets, where 70% of the volunteers was selected for generating the training data and 30% the test data. 
+The experiments have been carried out with a group of 30 volunteers within an age bracket of 19-48 years. Each person performed six activities (WALKING, WALKING_UPSTAIRS, WALKING_DOWNSTAIRS, SITTING, STANDING, LAYING) wearing a smartphone (Samsung Galaxy S II) on the waist. Using its embedded accelerometer and gyroscope, 3-axial linear acceleration and 3-axial angular velocity at a constant rate of 50Hz, were captured in the original dataset. The experiments have been video-recorded to label the data manually. The obtained dataset has been randomly partitioned into two sets, where 70% of the volunteers was selected for generating the training data and 30% the test data. Subsequently, the body linear acceleration and angular velocity were derived in time to obtain Jerk signals (tBodyAccJerk-XYZ and tBodyGyroJerk-XYZ). Also the magnitude of these three-dimensional signals were calculated using the Euclidean norm (tBodyAccMag, tGravityAccMag, tBodyAccJerkMag, tBodyGyroMag, tBodyGyroJerkMag). 
 
-This is the tidy version of the subset of the original Samsung data consisting of one table, Mean and Standard Deviations for each of the Subject/Activity combination. There are 30 subjects, each performing 6 activities. The table is in the **mean_std_subject_activity.txt'** file
+Finally a Fast Fourier Transform (FFT) was applied to some of these signals producing fBodyAcc-XYZ, fBodyAccJerk-XYZ, fBodyGyro-XYZ, fBodyAccJerkMag, fBodyGyroMag, fBodyGyroJerkMag. (Note the 'f' to indicate frequency domain signals). These signals were used to estimate variables of the feature vector for each pattern: '-XYZ' is used to denote 3-axial signals in the X, Y and Z directions.
 
-##### The tidy data set#####
-In addition to this file that you are reading, **cookbook.md**, there are three other files, included as part of this data set: 
-- **'run_analysis.R'**:  A "R" script file, for getting and cleaning the data from the original Human Activity Recognition Data Set 
-- **'README.md'**:. Explains the code in the R script in detail.  
-- **'tidydata.txt'**: the tidy data of the mean and standard deviations extracted from the original data set
+To summarize, the original data set consisted of 561 variables across all the above mentioned signals. These included **mean(), std(), mad(), max(), min(), sma(), energy(), iqr(), entropy(), arCoeff(), correlation(), maxInds() meanFREq(), skewness(), kurtosis(), bandsEnergy(), angle()** and others. Please refer to the **features_info.txt** file and the **features.txt** files that can be found at the above link where the Original data set is located, for detailed information on the rationale for the variables, the complete list of variables and their descriptions.
 
 
-#####The tidy data and the fields/variables in it#####
+This is the tidy version of the susbet of the above set consisting of one table, Mean and Standard Deviations for each of the Subject/Activity combination. In other words, this data set will consist of only the mean() and std() measurement variables across all signals, for each of the 30 subjects, each performing 6 activities. The accompanying run_analysis.R" script file and the README.md file provide the R script source code and the instructions and explanations, for the filtering and tidying rules applied that resulted in the tidy data, **tidydata.txt"** and how to read this data set into R.
+
 ######What is Tidy Data######
-The basis for the approach taken for generating the tidy data set is this excellent paper located at: - [Hadley Wickham's paper on Tidy Data](http://vita.had.co.nz/papers/tidy-data.pdf)
+The basis for the approach taken for "tidying" the given data set is this excellent paper located at: - [Hadley Wickham's paper on Tidy Data](http://vita.had.co.nz/papers/tidy-data.pdf)
 
 Tidy data is a standard way of mapping the meaning of a dataset to its structure. A dataset is tidy or messy depending on how rows, columns and tables are matched with observatoins, variables and types.
 Broad principles of tidy data:
@@ -32,10 +29,16 @@ Broad principles of tidy data:
 -	Each observation forms a row
 -	Each type of observational unit forms a table
 	
-
 Based on this, given 30 subjects and 6 activities, and a whole set of measurements, the tidy data set structure has "subjects" and  "activities" as rows, and the mean and standard deviation measurements as columns or measured variables. Each row represens mean/std measurements for one activity performed by one subject.
 
-The original data set consisted of 561 measurement variables for each subject, performing one of six activities. This data set is filtered down to 66 measured variables, and two id variables, subject and activity, in all 68 columns. The 66 measurements captured here represent only the mean and std variables, as specified by the intent of this exercise, and all others were discarded. This data set structure is a result of processing rules applied basedon the principles for tidy data, cited above in the paper. For more details on the processing rules and rationale please refer to the **README.md** file that is part of this dataset
+This data set is filtered down to 66 measured variables (from the original 561 variables), and two id variables, subject and activity, have been added to result in 68 columns. The 66 measurements captured here represent only the mean and std variables, as specified by the intent of this exercise, and all others were discarded. This data set structure is a result of processing rules applied based on the principles for tidy data, cited above in the paper. 
+##### The tidy data set#####
+In addition to this file that you are reading, **cookbook.md**, there are three other files, included as part of this data set: 
+- **'run_analysis.R'**:  A "R" script file, for getting and cleaning the data from the original Human Activity Recognition Data Set 
+- **'README.md'**:. Explains the code in the R script in detail.  
+- **'tidydata.txt'**: the tidy data set of the mean and standard deviations extracted from the original data set
+
+#####The tidy data and the fields/variables in it#####
 
 The units of each variable are normalized and bounded within [-1,1]. Each variable, below is indicated in italics, with the variable type next to it, followed by a description of the variable name , below in the box. The variables are:
 
