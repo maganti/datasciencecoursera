@@ -1,4 +1,4 @@
-**Run_Analysis.R:** 
+**run_analysis.R:** 
 
 R-script file for extracting a tidy data set consisting of the mean and std measurements for each subject/acitivity combination. This script will create a tidy data set from the original [Human Activity Recognition Using Smartphones Data Set](http://archive.ics.uci.edu/ml/datasets/Human+Activity+Recognition+Using+Smartphones) 
 
