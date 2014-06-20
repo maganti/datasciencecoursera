@@ -1,4 +1,8 @@
-# PLEASE see the README.md file for detailed explanation about this script and each of the processing steps
+#NOTE:
+# Please refer to the "codebook.md" file for a detailed explanation on the approach and rationale for reshaping and 
+# converting the original data set into a tidy data set. 
+
+# Please refer to the "README.md" file for a detailed explanation about this script and each of the processing steps taken
 
 #required packages for string processing and reshaping datasets
 
