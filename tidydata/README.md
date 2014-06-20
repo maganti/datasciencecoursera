@@ -26,10 +26,16 @@ Make sure the working directory in R is set to this directory.
 	-  	./projFiles/train/y_train.txt
 	-  	.projFiles/test/y_test.txt
 	
-Once those steps are complete, you can run the R script (run_analysis.R). Note that it requires the stringr and the reshape2 package.
+Once those steps are complete, you can run the R script (run_analysis.R). Note that "stringr" and the "reshape2" package are required to be loaded.
+The output of the R script is a tidy data set, "tidydata.txt"
 
-The output of the R script is a tidy data set, "tidydata.txt".
-
+**NOTE:**
+-	To load and view the uploaded tidy data set, "tidydata.txt", please do the following in R/RStudio. 
+```
+	fileurl<-"https://s3.amazonaws.com/coursera-uploads/user-3e1434223d2d020b5e5f7f02/972137/asst-3/d67125c0f7a911e39d86eb19968144a8.txt"
+	download.file(fileurl, destfile="<any_filename>.txt", method="curl")
+	tidydata<-read.csv("<any_filename>.txt")
+```
 
 ##### WHAT DOES THE SCRIPT DO, AND HOW DOES IT WORK#####
 ###### 1: Load test and training sets including activities and subjects######
@@ -143,7 +149,6 @@ cmt<-dcast(mt, subject+activity ~ variable, mean)
 
 ```
 write.csv(cmt, file="./tidydata.txt", row.names=F)
-tidydata<-read.csv("./tidydata.txt", stringsAsFactors=F)
 ```
 
 ######Acknowledgements:######
