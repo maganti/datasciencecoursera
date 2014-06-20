@@ -26,12 +26,12 @@ To summarize, the original data set consisted of 561 variables across all the ab
 -	reshaping resulted in multiple variables being stored in one column
 -	incomplete code book
 
-######What is Tidy Data######
+######Guidelines for "what" is Tidy Data######
 The basis for the approach taken for "tidying" the given data set is located at: - [Hadley Wickham's paper on Tidy Data](http://vita.had.co.nz/papers/tidy-data.pdf)
 
 An extract from the paper suggests: 
 
-"Tidy data is a standard way of mapping the meaning of a dataset to its structure. A dataset is tidy or messy depending 	   on how rows, columns and tables are matched with observatoins, variables and types.
+"Tidy data is a standard way of mapping the meaning of a dataset to its structure. A dataset is tidy or messy depending 	   on how rows, columns and tables are matched with observations, variables and types.
 
 Broad principles of tidy data:
 -	Each variable forms a column
