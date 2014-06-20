@@ -61,20 +61,16 @@
     nams2<-gsub("bodybody","body", nams2)
     colnames(subdata)<-nams2
     
-#creating a second tidy data set with the average of each variable for each 
-# activity and each subject. Many different options available to reshape the data, but preferred to use
-# melt and dcast. The same can be accomplished equally elegantly by using the "ddply" from the plyr package. 
-# Chose the subject, followed by activity ordering, where the rows are listed as subject 1 for all 
-# 6 activities, followed by subject 2 for all 6 activties and so on. For activity based ordering, simply swap the 
-#subject and activity in the dcast formula below
+#creating a second tidy data set with the average of each variable for each  activity and each subject. 
+#using the "melt" function to reshape the dataset by "subject" and "activity"
+#this results in a very long-format data set, with all the measurement variables under one header
+#recasting the long format to a wide format, by splitting the molten measurments variables into the wide
+#format after aggregating the average of the mean and standard measurements
+#chose the wide format because i think this makes for easier viewing and analysis
 
     mt<-melt(subdata, id.vars=c("subject", "activity"))
     cmt<-dcast(mt, subject+activity ~ variable, mean)
     
 #writes the resultant tidy data set to a file using write.csv. Setting row.names to false for cleaner reading 
-#this data set can be read back in using the read.csv, with stringsAsFactors set to false to preserve the order
-#in the factor variable. the same can be accomplished using the dput and dget function calls, without having to worry 
-#about factor level ordering
 
     write.csv(cmt, file="./tidydata.txt", row.names=F)
-    tidydata<-read.csv("./tidydata.txt", stringsAsFactors=F)
