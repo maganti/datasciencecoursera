@@ -6,11 +6,11 @@
 
 #####Abstract:#####
 Mean and Standard deviations extracted from the recordings of 30 subjects performing activities of daily living (ADL), while carrying a waist-mounted Samsung smartphone with embedded inertial sensors
-#####Source of the Data Set#####
+#####Source of the Original Data Set#####
 - [Original data](https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip)
 - [Original description of the dataset](http://archive.ics.uci.edu/ml/datasets/Human+Activity+Recognition+Using+Smartphones)
 
-#####Information about the Data Set#####
+#####Information about the Original Data Set#####
 The experiments have been carried out with a group of 30 volunteers within an age bracket of 19-48 years. Each person performed six activities (WALKING, WALKING_UPSTAIRS, WALKING_DOWNSTAIRS, SITTING, STANDING, LAYING) wearing a smartphone (Samsung Galaxy S II) on the waist. Using its embedded accelerometer and gyroscope, 3-axial linear acceleration and 3-axial angular velocity at a constant rate of 50Hz, were captured in the original dataset. The experiments have been video-recorded to label the data manually. The obtained dataset has been randomly partitioned into two sets, where 70% of the volunteers was selected for generating the training data and 30% the test data. Subsequently, the body linear acceleration and angular velocity were derived in time to obtain Jerk signals (tBodyAccJerk-XYZ and tBodyGyroJerk-XYZ). Also the magnitude of these three-dimensional signals were calculated using the Euclidean norm (tBodyAccMag, tGravityAccMag, tBodyAccJerkMag, tBodyGyroMag, tBodyGyroJerkMag). 
 
 Finally a Fast Fourier Transform (FFT) was applied to some of these signals producing fBodyAcc-XYZ, fBodyAccJerk-XYZ, fBodyGyro-XYZ, fBodyAccJerkMag, fBodyGyroMag, fBodyGyroJerkMag. (Note the 'f' to indicate frequency domain signals). These signals were used to estimate variables of the feature vector for each pattern: '-XYZ' is used to denote 3-axial signals in the X, Y and Z directions.
@@ -22,17 +22,19 @@ To summarize, the original data set consisted of 561 variables across all the ab
 -	column headers were values and not variable names
 -	multiple types of observational units were all stored in the same data sets
 -	single observational units were split into multiple data sets/files
--	variable names were inconsistent and violated most convention of variable naming for tidy data
+-	variable names were inconsistent and violated most conventions of variable naming for tidy data
 -	reshaping resulted in multiple variables being stored in one column
+-	incomplete code book
 
 ######What is Tidy Data######
-The basis for the approach taken for "tidying" the given data set is this excellent paper located at: - [Hadley Wickham's paper on Tidy Data](http://vita.had.co.nz/papers/tidy-data.pdf)
+The basis for the approach taken for "tidying" the given data set is located at: - [Hadley Wickham's paper on Tidy Data](http://vita.had.co.nz/papers/tidy-data.pdf)
 
-Tidy data is a standard way of mapping the meaning of a dataset to its structure. A dataset is tidy or messy depending on how rows, columns and tables are matched with observatoins, variables and types.
-Broad principles of tidy data:
+An extract from the paper suggests: 
+- "Tidy data is a standard way of mapping the meaning of a dataset to its structure. A dataset is tidy or messy depending 	   on how rows, columns and tables are matched with observatoins, variables and types.
+-  Broad principles of tidy data:
 -	Each variable forms a column
 -	Each observation forms a row
--	Each type of observational unit forms a table
+-	Each type of observational unit forms a table"
 	
 #####The tidy version of the dataset, "tidydata.txt"
 
@@ -47,9 +49,9 @@ This effort primarily focussed on the "manipulation" of "messy" data into "tidy"
 -	**Clean** - named column headers that were values only with no names, changed inconsistent column names 
 	into "tidy" names based on the tidy data principles
 
-The resultant tidy version of the original data set consists of one table, Mean and Standard Deviations for each of the Subject/Activity combination. This comprises of only the mean() and std() measurement variables across all signals, for each of the 30 subjects, each performing 6 activities. The accompanying **run_analysis.R" script file and the **README.md** files provide the R script source code and the instructions and explanations, for **reproducing this dataset**. They provide details on the specific filtering and tidying rules applied that resulted in the tidy data, **tidydata.txt"** and how to read this data set into R.
+The resultant tidy version of the original data set consists of one table, Mean and Standard Deviations for each of the Subject/Activity combination. This comprises of only the mean() and std() measurement variables across all signals, for each of the 30 subjects, each performing 6 activities. The accompanying **run_analysis.R"** script file and the **README.md** files provide the R script source code and the instructions and explanations, for **reproducing** this dataset. They provide details on the specific filtering and tidying rules applied that resulted in the tidy data, **tidydata.txt"** and how to read this data set into R.
 
-Based on this, given 30 subjects and 6 activities, the original data set consisting of 10299 observations for 561 variables has been reshaped into 180 observations (30 subjects times 6 activities each), of 68 columns, with subject and activity being the two 'id' variables), and a set of 66  measurement variables representing the averages of the mean and standard deviation for each subject/activity combination. Therefore, each row represens the average of the mean/std measurements for one activity performed by one subject. All observations not pertaining to mean and std measurements have been filtered out
+For the given 30 subjects and 6 activities, the original data set consisting of 10299 observations for 561 variables has been reshaped into 180 observations (30 subjects times 6 activities each), of 68 columns, with subject and activity being the two 'id' variables), and a set of 66  measurement variables representing the averages of the mean and standard deviation for each subject/activity combination. Therefore, each row represens the average of the mean/std measurements for one activity performed by one subject. All observations not pertaining to mean and std measurements have been filtered out
 
 ##### The tidy data set#####
 In addition to this file that you are reading, **cookbook.md**, there are three other files, included as part of this data set: 
