@@ -17,8 +17,13 @@ Finally a Fast Fourier Transform (FFT) was applied to some of these signals prod
 
 To summarize, the original data set consisted of 561 variables across all the above mentioned signals. These included **mean(), std(), mad(), max(), min(), sma(), energy(), iqr(), entropy(), arCoeff(), correlation(), maxInds() meanFREq(), skewness(), kurtosis(), bandsEnergy(), angle()** and others. Please refer to the **features_info.txt** file and the **features.txt** files that can be found at the above link where the Original data set is located, for detailed information on the rationale for the variables, the complete list of variables and their descriptions.
 
+#####Some of the messy issues with the original data set were:#####
 
-This is the tidy version of the susbet of the above set consisting of one table, Mean and Standard Deviations for each of the Subject/Activity combination. In other words, this data set will consist of only the mean() and std() measurement variables across all signals, for each of the 30 subjects, each performing 6 activities. The accompanying run_analysis.R" script file and the README.md file provide the R script source code and the instructions and explanations, for the filtering and tidying rules applied that resulted in the tidy data, **tidydata.txt"** and how to read this data set into R.
+-	column headers were values and not variable names
+-	multiple types of observational units were all stored in the same data sets
+-	single observational units were split into multiple data sets/files
+-	variable names were inconsistent and violated most convention of variable naming for tidy data
+-	reshaping resulted in multiple variables being stored in one column
 
 ######What is Tidy Data######
 The basis for the approach taken for "tidying" the given data set is this excellent paper located at: - [Hadley Wickham's paper on Tidy Data](http://vita.had.co.nz/papers/tidy-data.pdf)
@@ -29,9 +34,23 @@ Broad principles of tidy data:
 -	Each observation forms a row
 -	Each type of observational unit forms a table
 	
-Based on this, given 30 subjects and 6 activities, and a whole set of measurements, the tidy data set structure has "subjects" and  "activities" as rows, and the mean and standard deviation measurements as columns or measured variables. Each row represens mean/std measurements for one activity performed by one subject.
+#####The tidy version of the dataset, "tidydata.txt"
 
-This data set is filtered down to 66 measured variables (from the original 561 variables), and two id variables, subject and activity, have been added to result in 68 columns. The 66 measurements captured here represent only the mean and std variables, as specified by the intent of this exercise, and all others were discarded. This data set structure is a result of processing rules applied based on the principles for tidy data, cited above in the paper. 
+This efort primarily focussed on the "manipulation" of "messy" data into "tidy" data to address the above mentioned issues and requirements.  Broadly, the steps taken can be classified as:
+
+-	**Filter** - removed or filtered observations to end up with only mean/std observations
+-	**Transform** - added the **subject** and **activity** variables to the filterd observations
+-	**Aggregate** - collapsed or aggregated the means of all the mean and std measurements per 
+	each of the subject/activity combination. Aggregated data about the same observations, from multiple 
+	sources into one
+-	**Sort** - changed the order of the observations to be ordered by the subject id and each activity
+-	**Clean** - named column headers that were values only with no names, changed inconsistent column names 
+	into "tidy" names based on the tidy data principles
+
+The resultant tidy version of the original data set consists of one table, Mean and Standard Deviations for each of the Subject/Activity combination. This comprises of only the mean() and std() measurement variables across all signals, for each of the 30 subjects, each performing 6 activities. The accompanying **run_analysis.R" script file and the **README.md** files provide the R script source code and the instructions and explanations, for the filtering and tidying rules applied that resulted in the tidy data, **tidydata.txt"** and how to read this data set into R.
+
+Based on this, given 30 subjects and 6 activities, the original data set consisting of 10299 observations for 561 variables has been reshaped into 180 observations (30 subjects times 6 activities each), of 68 columns, with subject and activity being the two 'id' variables), and a set of 66  measurement variables representing the averages of the mean and standard deviation for each subject/activity combination. Therefore, each row represens the average of the mean/std measurements for one activity performed by one subject. All observations not pertaining to mean and std measurements have been filtered out
+
 ##### The tidy data set#####
 In addition to this file that you are reading, **cookbook.md**, there are three other files, included as part of this data set: 
 - **'run_analysis.R'**:  A "R" script file, for getting and cleaning the data from the original Human Activity Recognition Data Set 
