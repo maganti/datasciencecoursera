@@ -27,8 +27,7 @@
         activities<-rbind(testData_act, trainData_act)
         subjects<-rbind(testData_sub, trainData_sub)
 #uses descriptive activity names to name the activities in the data set. Replacing the numeric activity levels
-# with the descriptive ones read in from the activity_labels file. Ensured the proper order of levels and labels, by 
-# reading in the file's classes as "character"
+# with the descriptive ones read in from the activity_labels file. 
         activity <- factor(activities$V1,levels=acts$V1,labels=acts$V2)
 #sets the names of the variable columns in the test and train data sets (measures) to the ones 
 #read from the activity_labels text file
