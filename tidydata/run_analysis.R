@@ -54,4 +54,4 @@
         mt<-melt(subdata, id.vars=c("subject", "activity"))
         cmt<-dcast(mt, subject+activity ~ variable, mean)
 #writes the resultant tidy data set to a file using write.csv
-        write.csv(cmt, file="./tidydata/t.txt", row.names=F)
+        write.csv(cmt, file="./tidydata/tidydata.txt", row.names=F)
