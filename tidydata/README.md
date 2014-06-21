@@ -54,53 +54,47 @@ testData_sub <- read.table("./test/subject_test.txt",header=FALSE)
 trainData <- read.table("./train/X_train.txt",header=FALSE)
 trainData_act <- read.table("./train/y_train.txt",header=FALSE)
 trainData_sub <- read.table("./train/subject_train.txt",header=FALSE)
-activities <- read.table("activity_labels.txt",header=FALSE,colClasses="character")
+acts <- read.table("activity_labels.txt",header=FALSE,colClasses="character")
+```
+######1.1 First level merging of the test and train data sets into one set each of the subject, activity and measurements
+```
+measures<-rbind(testData, trainData)
+activities<-rbind(testData_act, trainData_act)
+subjects<-rbind(testData_sub, trainData_sub)
 ```
 
-			
-            
 ######2:Use Descriptive activity names to name the activities in the data set######
-- The test and train file read in only show the activity numbers for all subjects. 
+- The test and train files read in only show the activity numbers for all subjects. 
 - An appropriate replacement for this is to replace the activity number with the actual activity name. 
 - The levels and labels for activities are read in from the activity_labels text file and a factor variable created
 - The test&train activity data frame variable is converted to a factor variable(created with the levels and labels read in from the activity labels text file) 
  
 
 ```
-testData_act$V1 <- factor(testData_act$V1,levels=activities$V1,labels=activities$V2)
-trainData_act$V1 <- factor(trainData_act$V1,levels=activities$V1,labels=activities$V2)
+activity <- factor(activities$V1,levels=acts$V1,labels=acts$V2)
 ```
 
-			
-			
 ######3: Sets the names of the variable columns in the test and train data sets to the ones read from the activity_labels text file ######
 - the features.txt file, contains the variable names for the measurements found in the test and train data sets read in
 - this data frame has an integer variable containing values 1:561, for the number of columns and a factor variables that has 477 levels, showing that there are duplicate column variables
 - therefore this is read in as a  "character" column to have 561 variables with 561 variable names (some being duplicates)
-- Subsequent processing during the extract stage wil address the duplicate columns
+- Subsequent processing during the extract stage wil remove the duplicate columns, along with the filtered columns
 
 
 ```
 features <- read.table("features.txt",header=FALSE,colClasses="character")
-colnames(testData)<-features$V2
-colnames(trainData)<-features$V2
-colnames(testData_act)<-c("activity")
-colnames(trainData_act)<-c("activity")
-colnames(testData_sub)<-c("subject")
-colnames(trainData_sub)<-c("subject")
+colnames(measures)<-features$V2
 ```
 	
 	
-######4: Merge test and training sets into one data set, including activities and subjects######
-- The cbind calls below add the activity and subject variables as new columns to both the test and train data sets.
+######4: Merge test and training sets into one data set, and adds the new columns for subject and activity and creates one merged data set######
+- The cbind call below adds the activity and subject variables as new columns, named as "subject" and "activity" respectively, to the merged test and train measurement set.
 - both of these are required, since the objective of the exercise is to use these two variables as "id" variables or variables for which the measurements are to be extracted
-- And finally, the rows of both the test and train data sets are merged to form one super data set
+- And the result is one merged data set of the subjects, activities and the measurements
 
 
 ```
-testData<-cbind(testData,testData_act, testData_sub)
-trainData<-cbind(trainData,trainData_act, trainData_sub)
-mergedData<-rbind(testData,trainData)
+mergedData<-cbind(measures, "subject"=subjects$V1, "activity"=activity)
 ```
 
 ######5: Extracts only the measurements on the mean and standard deviation for each measurement, along with the subject and activity columns######
@@ -111,7 +105,7 @@ mergedData<-rbind(testData,trainData)
 
 
 ```
- mergedData<-mergedData[, !grepl("angle|mean[fF]req", colnames(mergedData))]
+mergedData<-mergedData[, !grepl("angle|mean[fF]req", colnames(mergedData))]
 subdata<-mergedData[, grep("mean|std|activity|subject", colnames(mergedData))]
 ```
 
@@ -143,7 +137,6 @@ cmt<-dcast(mt, subject+activity ~ variable, mean)
         
 ######8:  Writes the resultant tidy data set to a text file using write.csv######
 - using write.csv but saving as a text file. 
-- another equally efficient way to write is dput and read is dget, especially for text files
 - the tidy set created can be read back using the read.csv call
 
 
