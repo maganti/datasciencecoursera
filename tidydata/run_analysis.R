@@ -3,7 +3,7 @@
 # converting the original data set into a tidy data set. 
 
 #To load and view the uploaded tidy data set, "tidydata.txt", please do the following in R/RStudio:
-#       fileurl<-"https://s3.amazonaws.com/coursera-uploads/user-3e1434223d2d020b5e5f7f02/972137/asst-3/d67125c0f7a911e39d86eb19968144a8.txt"
+#       fileurl<-"https://s3.amazonaws.com/coursera-uploads/user-3e1434223d2d020b5e5f7f02/972137/asst-3/0f7aade0f96811e3a72e3511473680ba.txt"
 #       download.file(fileurl, destfile="<any_filename>.txt", method="curl")
 #       tidydata<-read.csv("<any_filename>.txt")
 
@@ -54,4 +54,4 @@
         mt<-melt(subdata, id.vars=c("subject", "activity"))
         cmt<-dcast(mt, subject+activity ~ variable, mean)
 #writes the resultant tidy data set to a file using write.csv
-        write.csv(cmt, file="./tidydata/t.txt", row.names=F)
+        write.csv(cmt, file="./tidydata/tidydata.txt", row.names=F)
