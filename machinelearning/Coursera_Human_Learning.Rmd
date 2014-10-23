@@ -1,0 +1,151 @@
+---
+title: 'Human Activities: Machine Learning Coursera Project'
+author: "Ramesh Maganti"
+date: "22 October 2014"
+output: html_document
+theme: cerulean
+---
+
+#####Introduction
+
+Six participants, young and healthy were asked to perform barbell lifts correctly and incorrectly in 5 different ways. The 5 possible methods include:
+
+- A: exactly according to the specification
+- B: throwing the elbows to the front
+- C: lifting the dumbbell only halfway
+- D: lowering the dumbbell only halfway
+- E: throwing the hips to the front
+
+The goal of this project is to predict the manner of performing unilateral dumbbell biceps curls based on data from accelerometers on the belt, forearm, arm, and dumbbell of 6 participants. 
+
+More information is available from the website here: http://groupware.les.inf.puc-rio.br/har (see the section on the Weight Lifting Exercise Dataset). 
+
+**Setting environment and loading data files**
+
+```{r, results="hide"}
+library(caret)
+setwd("~/Desktop/coursera/Machine Learning")
+test<-read.csv("./pmlTest.csv", stringsAsFactors=F, sep=',', 
+               na.strings=c('NA',''))
+train<-read.csv("./pmlTrain.csv", stringsAsFactors=F, sep=',', 
+                na.strings=c('NA',''))
+```
+
+##### Exploratory data analysis and Data Cleansing
+
+An inspection of the _train_ data set shows a lot of variables with mostly NAs and blank values. Below we compute the number of column variables with no NA values and proceed to subset the train and test data set to contain only those variables
+
+```{r, echo=TRUE}
+
+table(colSums(is.na(train))==0)
+train <- train[,colSums(is.na(train))==0]
+test <- test[,colSums(is.na(test))==0]
+```
+
+We can see from above that only 60 of the columns fit the criteria. Both the test and train data sets now contain 60 variables.  Further examination of the train data set indicates that the first 5 variables,  `r names(train)[1:5]` do not seem to be related to the requirement. 3 of them are time stamps, one is a username and the other is a row index number. Therefore all 5 are filtered out from both the data sets. And finally the _classe_ variable in the train set, the response variable for this task, is converted into a factor, below. Now each of the train and test data sets have 55 variables
+
+```{r, echo=TRUE}
+train<-train[, -c(1:5)]
+test<-test[, -c(1:5)]
+train$classe<-as.factor(train$classe)
+dim(train); dim(test)
+```
+
+#####Pre Processing of predictors
+
+- STEP 1: **near Zero Variance predictors**: 
+
+In some situations, the data generating mechanism can create predictors that only have a single unique value (i.e. a "zero-variance predictor"). For many models this may cause the model to crash or the fit to be unstable. The concern here is that these predictors may become zero-variance predictors when the data are split into cross-validation/bootstrap sub-samples or that a few samples may have an undue influence on the model. Below, these "near-zero-variance" predictors are identified, using the **nearZeroVar** function in caret and only those variables that are not found to be zero variance predictors are retained, prior to modeling.
+
+``` {r}
+nzv <- nearZeroVar(train,saveMetrics=TRUE)
+train <- train[,nzv$nzv==FALSE]
+nzv <- nearZeroVar(test,saveMetrics=TRUE)
+test <- test[,nzv$nzv==FALSE]
+```
+
+- STEP 2: **Identifying/Filtering Correlated Predictors:**
+
+While there are some models that thrive on correlated predictors (such as pls), other models may benefit from reducing the level of correlation between the predictors.
+
+Given a correlation matrix, the **findCorrelation** function flags predictors for removal. Below, we generate a correlation matrix, for all variables, but the _classe_ variable. This matrix is then passed to the **findCorrelation** function, and all variables with absolute correlation above 0.75 are omitted from both the test and train data sets
+
+```{r}
+trCor <- cor(train[, c(1:53)])
+highTrCor <- findCorrelation(trCor, cutoff = 0.75)
+filteredTrain <- train[, -highTrCor]
+filteredTest<-test[, -highTrCor]
+dim(filteredTrain); dim(filteredTest)
+```
+
+Now the final filtered, cleaned and pre processed data sets consisting of 34 variables are ready for cross validation and modeling. The goal of cross validation is to define a data set to "test" the model in the training phase (i.e., the validation data set), in order to limit problems like over-fitting, give an insight on how the model will generalize to an independent data set (i.e., an unknown data set, ), etc. In this case,this technique will allow us to generalize how the results will apply to the test data set. 
+
+To do this, we split the above **filteredTrain** data set into a training and a cross validation train set, into proportions of 75:25 for the training and cross validation training sets
+
+**Create Cross validation train and test sets**
+
+```{r}
+set.seed(920317)
+inTrain = createDataPartition(filteredTrain$classe, p = 0.75, list=FALSE)
+training = filteredTrain[inTrain,]
+cvTrain = filteredTrain[-inTrain,]
+```
+
+**Train Models**
+
+Now we proceed with training the training data set. Random Forests are being used since they strike a balance between bias and variance, have few parameters to tune and are good to be used as a first cut, when detailed information about the underlying model is absent. We use method=rf, to use the random forest algorithm, the train control method is set to "cv", for cross validation", with all its other defaults, and to speed up processing, we set the allowParallel option to true.
+
+```{r, results="hide"}
+modFit <- train(classe ~., method="rf", data=training, 
+        trControl=trainControl(method='cv'), number=5, allowParallel=TRUE )
+```
+
+##### Predictions, Accuracy and Error
+
+Now we fit the model generated on the training data set and then inspect the accuracy of the fit, on the training set, followed by the cross validation training set, by calling the confusionMatrix caret function as follows:
+
+```{r}
+trainingPred <- predict(modFit, training)
+confusionMatrix(trainingPred, training$classe)
+```
+
+We repeat the above on the cross validation training set to compare the accuracies, to arrive at the ** estimated Out of Sample Error** on the test data set. The plot below shows the importance of each variable in the random forest model.
+
+```{r}
+cvPred <- predict(modFit, cvTrain)
+confusionMatrix(cvPred, cvTrain$classe)
+plot(varImp(modFit, scale=FALSE), top=20)
+```
+
+The **Out of Sample Error** can be computed on the predictions on the cross validated training set as follows:
+
+Out of Sample Error = 1 - Out of Sample Accuracy and Out of Sample Accuracy can be computed as below:
+
+_the sum of predictions that were equal to the value of the classe response variable divided by the total number of predictions_ as follows:
+
+```{r}
+ooseAccuracy <- sum(cvPred == cvTrain$classe)/length(cvPred)
+```
+
+We can see the that this is `r ooseAccuracy` and this is the same as the rounded value of the confusionMatrix for the cross validated dataset accuracy value above. Therefore the 
+
+**estimated out of sample Error percentage** is
+
+```{r}
+outofSampleError<- 1 - ooseAccuracy
+osErrorPercentage<- round(outofSampleError*100, digits=2) 
+paste0(osErrorPercentage, "%")
+```
+
+#####RESULTS
+
+Finally, we apply the model to compute the predictions on the testing data set. The results can be found below:
+
+```{r}
+testingPred <- predict(modFit, filteredTest)
+testingPred
+```
+
+#####CONCLUSIONS
+
+Our results show that the model we have built to predict the manner of performing unilateral dumbbell biceps curls is highly accurate, with an out of sample error of only 0.16%. Applying the model on a test data set with only twenty test cases, we would expect all predictions to turn out to be right.
